@@ -1,5 +1,5 @@
-import time
 import random
+import time
 
 
 class TreeNode:
@@ -8,68 +8,78 @@ class TreeNode:
         self.left = left
         self.right = right
 
-    def __str__(self):
-        return f'Node({self.value})'
 
+class BinaryTree:
+    def __init__(self, root=None):
+        self.root = root
 
-count_nodes_recursive = lambda node: \
-    (1 + count_nodes_recursive(node.left) + count_nodes_recursive(node.right)) if node else 0
+    @staticmethod
+    def generate_random_tree(n):
+        if n == 0:
+            return None
+        root = TreeNode(random.randint(1, 100))
+        left_size = random.randint(0, n - 1)
+        right_size = n - 1 - left_size
+        root.left = BinaryTree.generate_random_tree(left_size)
+        root.right = BinaryTree.generate_random_tree(right_size)
+        return root
 
+    def count_nodes_recursive(self, node):
+        if node is None:
+            return 0
+        return 1 + self.count_nodes_recursive(node.left) + self.count_nodes_recursive(node.right)
 
-def count_nodes_iterative(node):
-    if node is None: return 0
+    def count_nodes_iterative(self, node):
+        if node is None:
+            return 0
 
-    stack = [node]
-    count = 0
-    while stack:
-        node = stack.pop()
-        if node:
+        count = 0
+        stack = [node]
+
+        while stack:
+            current = stack.pop()
             count += 1
-            stack.append(node.left)
-            stack.append(node.right)
-    return count
+            if current.left:
+                stack.append(current.left)
+            if current.right:
+                stack.append(current.right)
 
+        return count
 
-def count_nodes(node):
-    if node is None:
-        return 0
-    return 1 + count_nodes_helper(node.left) + count_nodes_helper(node.right)
+    def count_nodes_indirect(self, node):
+        if node is None:
+            return 0
+        return 1 + self.count_nodes_helper(node.left) + self.count_nodes_helper(node.right)
 
+    def count_nodes_helper(self, node):
+        if node is None:
+            return 0
+        return self.count_nodes_indirect(node)
 
-def count_nodes_helper(node):
-    if node is None:
-        return 0
-    return count_nodes(node)
-
-
-def generate_random_tree(n):
-    if n == 0:
-        return None
-    root = TreeNode(random.randint(1, 100))
-    left_size = random.randint(0, n - 1)
-    right_size = n - 1 - left_size
-    root.left = generate_random_tree(left_size)
-    root.right = generate_random_tree(right_size)
-    return root
+    def count_nodes(self, method='recursive'):
+        if method == 'recursive':
+            return self.count_nodes_recursive(self.root)
+        elif method == 'iterative':
+            return self.count_nodes_iterative(self.root)
+        elif method == 'indirect':
+            return self.count_nodes_indirect(self.root)
+        else:
+            raise ValueError("Unknown method: choose 'recursive', 'iterative', or 'indirect'")
 
 
 def experimental_complexity():
-    sizes = [10, 100, 1000, 10000, 10000000]
-    for size in sizes:
-        tree = generate_random_tree(size)
+    sizes = [10, 100, 1000, 10000, 100000, 1000000]
+    methods = ['recursive', 'iterative', 'indirect']
 
-        start_time = time.time()
-        node_count = count_nodes_recursive(tree)
-        end_time = time.time()
-        print(f"Recursive: Size = {size}, Node count: {node_count}, Time = {end_time - start_time:.6f} seconds")
-        start_time = time.time()
-        node_count = count_nodes_iterative(tree)
-        end_time = time.time()
-        print(f"Iterative: Size = {size}, Node count: {node_count}, Time = {end_time - start_time:.6f} seconds")
-        start_time = time.time()
-        node_count = count_nodes(tree)
-        end_time = time.time()
-        print(f"Indirect: Size = {size}, Node count: {node_count}, Time = {end_time - start_time:.6f} seconds")
+    for size in sizes:
+        tree = BinaryTree(BinaryTree.generate_random_tree(size))
+
+        for method in methods:
+            start_time = time.time()
+            count = tree.count_nodes(method)
+            end_time = time.time()
+            print(
+                f"Method: {method.capitalize()}, Size: {size}, Count: {count}, Time: {end_time - start_time:.6f} seconds")
 
 
 if __name__ == '__main__':
