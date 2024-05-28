@@ -1,0 +1,10 @@
+Recursive: Size = 10, Node count: 10, Time = 0.000002 seconds
+Iterative: Size = 10, Node count: 10, Time = 0.000010 seconds
+Recursive: Size = 100, Node count: 100, Time = 0.000014 seconds
+Iterative: Size = 100, Node count: 100, Time = 0.000016 seconds
+Recursive: Size = 1000, Node count: 1000, Time = 0.000123 seconds
+Iterative: Size = 1000, Node count: 1000, Time = 0.000159 seconds
+Recursive: Size = 10000, Node count: 10000, Time = 0.001237 seconds
+Iterative: Size = 10000, Node count: 10000, Time = 0.001634 seconds
+Recursive: Size = 10000000, Node count: 10000000, Time = 1.864226 seconds
+Iterative: Size = 10000000, Node count: 10000000, Time = 1.684738 seconds
