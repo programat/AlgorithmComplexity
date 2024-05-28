@@ -1,0 +1,174 @@
+import Foundation
+
+func randomMatrix(_ size: Int, _ is_print: Bool = false) -> [[Double]] {
+    var matrix = [[Double]]()
+    for _ in 0..<size {
+        var row = [Double]()
+        for _ in 0..<size {
+            row.append(Double.random(in: 0..<10)) // Random values between 0 and 10
+        }
+        matrix.append(row)
+    }
+
+    if is_print{printMatrix(matrix)}
+
+    return matrix
+}
+
+func printMatrix(_ matrix: [[Double]], _ name_of_matrix: String = "Matrix") {
+    print(name_of_matrix)
+    for row in matrix {
+        for element in row {
+            print(element, terminator: " ")
+        }
+        print()
+    }
+}
+
+
+// 1. vector muliplying
+func scalarProduct(_ vector1: [Double], _ vector2: [Double]) -> Double? {
+    guard vector1.count == vector2.count else {
+        return nil // Vectors must have the same length for multiplication
+    }
+
+    // Perform element-wise multiplication
+    var result: [Double] = []
+    for i in 0..<vector1.count {
+        result.append(vector1[i] * vector2[i])
+    }
+
+    return result.reduce(0, +)
+}
+
+// Time complexity: O(n), whre n is the length of vectors
+
+// Example usage:
+let vectorA = [1.0, 2.0, 3.0]
+let vectorB = [4.0, 5.0, 6.0]
+
+if let result = scalarProduct(vectorA, vectorB) {
+    print("Result: \(result)")
+} else {
+    print("Error: Vectors must have the same length.")
+}
+
+
+func matrixMultiplication(_ matrix1: [[Double]], _ matrix2: [[Double]]) -> [[Double]]? {
+    guard matrix1[0].count == matrix2.count else {
+        return nil // Количество столбцов первой матрицы должно быть равно количеству строк второй матрицы
+    }
+
+    let n = matrix1.count
+    let m = matrix2[0].count
+    let p = matrix2.count
+    var result = Array(repeating: Array(repeating: 0.0, count: m), count: n)
+
+    for i in 0..<n {
+        for j in 0..<m {
+            for k in 0..<p {
+                result[i][j] += matrix1[i][k] * matrix2[k][j]
+            }
+        }
+    }
+
+    return result
+}
+//T = n*m*p * 5n + m*n
+// Time complexity: O(n^3), где n - the shape of the square matrix
+
+// Example usage:
+let n = 3 // Размер матрицы
+let matrix1 = randomMatrix(n)
+let matrix2 = randomMatrix(n)
+
+if let result = matrixMultiplication(matrix1, matrix2) {
+    printMatrix(result, "Result is")
+} else {
+    print("Error: Vectors must have the same length.")
+}
+
+
+func insertionSort<T: Comparable>(_ array: inout [T]) {
+    for i in 1..<array.count {
+        let key = array[i]
+        var j = i - 1
+        while j >= 0 && array[j] > key {
+            array[j + 1] = array[j]
+            j -= 1
+        }
+        array[j + 1] = key
+    }
+}
+
+//T min = n + 3
+//T max = 3n^2 + 3
+
+
+
+// Example usage:
+var array = [12, 4, 5, 6, 1, 2, 10, 7]
+insertionSort(&array)
+print("Insertion sort: \(array)")
+
+//Insertion sort:
+//In the worst case: O(n^2)
+//On average: O(n^2)
+//At best (if the array is already sorted): O(n)
+
+func selectionSort<T: Comparable>(_ array: inout [T]) {
+    for i in 0..<array.count - 1 {
+        var minIndex = i
+        for j in i + 1..<array.count {
+            if array[j] < array[minIndex] {
+                minIndex = j
+            }
+        }
+        if minIndex != i {
+            array.swapAt(i, minIndex)
+        }
+    }
+}
+
+Tmax = n*(n-1)
+Tmin = n/2 * (n-1))
+
+// Example usage:
+array = [12, 4, 5, 6, 1, 2, 10, 7]
+selectionSort(&array)
+print("Selection sort: \(array)")
+
+//Selection sort:
+//In the worst case: O(n^2)
+//On average: O(n^2)
+//At best: O(n^2) (compared to the insert and bubble, has no advantage with partially sorted data)
+
+
+
+
+func bubbleSort<T: Comparable>(_ array: inout [T]) {
+    let n = array.count
+    for i in 0..<n-1 {
+        for j in 0..<n-i-1 {
+            if array[j] > array[j+1] {
+                array.swapAt(j, j+1)
+            }
+        }
+    }
+}
+
+//Tmax = (1 + n*n*4)
+Tmin = (1 + n*n)
+
+
+// Example usage:
+array = [12, 4, 5, 6, 1, 2, 10, 7]
+bubbleSort(&array)
+print("Bubble sort: \(array)")
+
+//Bubble sorting:
+//In the worst case: O(n^2)
+//On average: O(n^2)
+//At best (if the array is already sorted): O(n)
+
+
